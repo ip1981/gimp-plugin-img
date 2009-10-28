@@ -1,0 +1,48 @@
+This plugin was tested with Gimp 2.6, GCC 4.2.4 and GTK+ 2.12.
+Older versions may work too, but for example
+you have to remove some compiler options.
+
+
+
+Main file is "plugin-img.c".
+
+The simplest way to install is just type "make install".
+
+It will build the plugin and copy it
+to user's Gimp directory (~/.gimp-2.6/plug-ins/)
+
+See Makefile for details.
+
+
+
+Example:
+
+make install
+gcc -c -I/usr/include/gimp-2.0 -I/usr/include/gtk-2.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/pixman-1   -O2 -ansi -pedantic -Wall -Wextra -Wno-attributes -Wno-unused-parameter -save-temps -g img-load.c -o img-load.o
+In file included from /usr/include/gimp-2.0/libgimpbase/gimpbase.h:28,
+                 from /usr/include/gimp-2.0/libgimp/gimp.h:28,
+                 from plugin-img.h:5,
+                 from img-load.c:2:
+/usr/include/gimp-2.0/libgimpbase/gimpcpuaccel.h:31: warning: ISO C restricts enumerator values to range of 'int'
+gcc -c -I/usr/include/gimp-2.0 -I/usr/include/gtk-2.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/pixman-1   -O2 -ansi -pedantic -Wall -Wextra -Wno-attributes -Wno-unused-parameter -save-temps -g img-save-dialog.c -o img-save-dialog.o
+In file included from /usr/include/gimp-2.0/libgimpbase/gimpbase.h:28,
+                 from /usr/include/gimp-2.0/libgimp/gimp.h:28,
+                 from plugin-img.h:5,
+                 from img-save-dialog.c:2:
+/usr/include/gimp-2.0/libgimpbase/gimpcpuaccel.h:31: warning: ISO C restricts enumerator values to range of 'int'
+gcc -c -I/usr/include/gimp-2.0 -I/usr/include/gtk-2.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/pixman-1   -O2 -ansi -pedantic -Wall -Wextra -Wno-attributes -Wno-unused-parameter -save-temps -g img-save.c -o img-save.o
+In file included from /usr/include/gimp-2.0/libgimpbase/gimpbase.h:28,
+                 from /usr/include/gimp-2.0/libgimp/gimp.h:28,
+                 from plugin-img.h:5,
+                 from img-save.c:2:
+/usr/include/gimp-2.0/libgimpbase/gimpcpuaccel.h:31: warning: ISO C restricts enumerator values to range of 'int'
+gcc -c -I/usr/include/gimp-2.0 -I/usr/include/gtk-2.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/pixman-1   -O2 -ansi -pedantic -Wall -Wextra -Wno-attributes -Wno-unused-parameter -save-temps -g plugin-img.c -o plugin-img.o
+In file included from /usr/include/gimp-2.0/libgimpbase/gimpbase.h:28,
+                 from /usr/include/gimp-2.0/libgimp/gimp.h:28,
+                 from plugin-img.h:5,
+                 from plugin-img.c:2:
+/usr/include/gimp-2.0/libgimpbase/gimpcpuaccel.h:31: warning: ISO C restricts enumerator values to range of 'int'
+gcc -lgimpui-2.0 -lgimpwidgets-2.0 -lgimpmodule-2.0 -lgimp-2.0 -lgimpmath-2.0 -lgimpconfig-2.0 -lgimpcolor-2.0 -lgimpbase-2.0 -lgtk-x11-2.0 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -lglib-2.0   img-load.o img-save-dialog.o img-save.o plugin-img.o -o plugin-img
+gimptool-2.0 --install-bin plugin-img
+cp plugin-img /home/pashev/.gimp-2.6/plug-ins
+
