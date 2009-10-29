@@ -96,7 +96,7 @@ img_read_options(ImageParasite * p, const gchar * fmt, const gchar * ckey,
             else
             {
                 g_set_error(error, 0, 0,
-                            "Hex color key %s is invalid; examples are FFF or FF44GG",
+                            "Hex color key %s is invalid; examples are 0xFFF or 0xFF44GG",
                             ckey);
                 return GIMP_PDB_CALLING_ERROR;
             }
