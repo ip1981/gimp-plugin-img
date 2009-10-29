@@ -46,7 +46,7 @@ extern const gchar *FMT[3];
  *
  * */
 
-/* ACHTUNG: byte order in the file is BIG-ENDIAN - lowest byte comes first */
+/* ACHTUNG: byte order in the file is LITTLE-ENDIAN - lowest byte comes first */
 typedef struct _FileHeader
 {
     guint8 fmt;                 /* 0 - RGB565, 1 - RGB, 2 - RGBA) */
