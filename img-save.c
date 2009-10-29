@@ -335,6 +335,11 @@ img_save_image(gint32 image, const ImageParasite * plugin,
     hdr.width = width * hdr.ncols;
     hdr.height = height * hdr.nrows;
 
+    hdr.nrows = GUINT32_TO_LE(hdr.nrows);
+    hdr.ncols = GUINT32_TO_LE(hdr.ncols);
+    hdr.width = GUINT32_TO_LE(hdr.width);
+    hdr.height = GUINT32_TO_LE(hdr.height);
+
     D(("*** Saving \"%s\"\n", filename));
 
     gimp_progress_init_printf("Saving '%s'", gimp_filename_to_utf8(filename));
