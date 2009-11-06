@@ -245,7 +245,6 @@ img_sanity_check(gint32 image_ID, GError ** error)
     if (nlayers == 0)
     {
         g_set_error(error, 0, 0, "Can't save empty images ;-)");
-        g_free(layers);
         return GIMP_PDB_EXECUTION_ERROR;
     }
 
