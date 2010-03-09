@@ -28,7 +28,7 @@ help:
 	@echo "install - install plugin"
 	@echo ""
 	@echo "indent  - beatify sources"
-	@echo "clean   - remove build gabage"
+	@echo "clean   - remove build garbage"
 	@echo ""
 	@echo "test    - run gimp with samples"
 	@echo "test-fu - run non-interactively gimp for batch file recoding"
