@@ -418,7 +418,7 @@ img_save_image (gint32 image, const ImageParasite * plugin,
                            FALSE);
       gimp_pixel_rgn_get_rect (&pixel_rgn, (guchar *) pixels, 0, 0, width,
                                height);
-      D (("Writing frame #%u of %u (%u bytes)\n", i + 1, nlayers, data_size));
+      D (("Writing frame #%u of %u (%lu bytes)\n", i + 1, nlayers, data_size));
       /*
        * Allow different image type for different layers
        */

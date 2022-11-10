@@ -160,7 +160,7 @@ img_load_image (const gchar * filename, ImageParasite * meta, GError ** error)
         {
           frame++;
           gimp_progress_update ((gdouble) frame / (gdouble) nframes);
-          D (("Reading frame #%u of %u (%ux%u, %u bytes)\n", frame, nframes,
+          D (("Reading frame #%u of %u (%ux%u, %lu bytes)\n", frame, nframes,
               width, height, src_size));
           g_snprintf (buf, sizeof (buf), "#%i", frame);
           layer =
