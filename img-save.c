@@ -272,13 +272,13 @@ img_save_image (gint32 image, const ImageParasite * plugin,
                 const gchar * filename, GError ** error)
 {
   FILE *fp;
-  GimpPixelRgn pixel_rgn;
-  GimpDrawable *drawable = NULL;
   gint *layers = NULL, nlayers;
   size_t nwritten;
   guint8 *data = NULL, *pixels = NULL;
+  GeglBuffer *gegl_buffer;
   size_t data_size, npixels;
   gint i, width, height;
+  const Babl *format;
   FileHeader hdr;
 
   /*
@@ -341,6 +341,7 @@ img_save_image (gint32 image, const ImageParasite * plugin,
     {
     case FMT_RGB565:
       data_size *= 2;
+      format = babl_format ("R'G'B' u8");
       break;
 
     case FMT_RGB:
@@ -359,6 +360,7 @@ img_save_image (gint32 image, const ImageParasite * plugin,
           return GIMP_PDB_EXECUTION_ERROR;
         }
       data_size *= 3;
+      format = babl_format ("R'G'B' u8");
       break;
 
     case FMT_RGBA:
@@ -367,7 +369,15 @@ img_save_image (gint32 image, const ImageParasite * plugin,
                    "(%1u, %1u, %1u) to full transparent\n", plugin->ckey.R,
                    plugin->ckey.G, plugin->ckey.B)););
       data_size *= 4;
+      format = babl_format ("R'G'B'A u8");
       break;
+
+    default:
+      D (("Invalid file format: %1u\n", hdr.fmt));
+      g_set_error (error, 0, 0, "Invalid file format: %1u\n", hdr.fmt);
+      fclose (fp);
+      g_free (layers);
+      return -1;
     }
 
   /*
@@ -378,12 +388,16 @@ img_save_image (gint32 image, const ImageParasite * plugin,
   for (i = 0; i < nlayers; i++)
     {
       gimp_progress_update ((gdouble) i / (gdouble) nlayers);
-      drawable = gimp_drawable_get (layers[i]);
-      gimp_pixel_rgn_init (&pixel_rgn, drawable, 0, 0, width, height, FALSE,
-                           FALSE);
-      gimp_pixel_rgn_get_rect (&pixel_rgn, (guchar *) pixels, 0, 0, width,
-                               height);
-      D (("Writing frame #%u of %u (%lu bytes)\n", i + 1, nlayers, data_size));
+      gegl_buffer = gimp_drawable_get_buffer (layers[i]);
+
+      gegl_buffer_get (gegl_buffer, GEGL_RECTANGLE (0, 0,
+                                                    width, height), 1.0,
+                       format, pixels, GEGL_AUTO_ROWSTRIDE, GEGL_ABYSS_NONE);
+
+      g_object_unref (gegl_buffer);
+
+      D (("Writing frame #%u of %u (%lu bytes)\n", i + 1, nlayers,
+          data_size));
       /*
        * Allow different image type for different layers
        */

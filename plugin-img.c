@@ -11,10 +11,12 @@ img_set_parasite (gint32 image, const ImageParasite * p)
   D (("Setting parasite for %u: format: %s (%1u), "
       "color key: %s (%1u, %1u, %1u)\n", image, FMT[p->format], p->format,
       (p->ckey.is) ? "yes" : "no", p->ckey.R, p->ckey.G, p->ckey.B));
-  gimp_image_parasite_detach (image, PARASITE_ORIG_FILE);
-  gimp_image_attach_new_parasite (image, PARASITE_ORIG_FILE,
-                                  GIMP_PARASITE_PERSISTENT,
-                                  sizeof (ImageParasite), p);
+  gimp_image_detach_parasite (image, PARASITE_ORIG_FILE);
+
+  const GimpParasite *gp =
+    gimp_parasite_new (PARASITE_ORIG_FILE, GIMP_PARASITE_PERSISTENT,
+                       sizeof (*p), p);
+  gimp_image_attach_parasite (image, gp);
 }
 
 static void
@@ -22,12 +24,12 @@ img_get_parasite (gint32 image, ImageParasite * p)
 {
   GimpParasite *gp = NULL;
 
-  gp = gimp_image_parasite_find (image, PARASITE_ORIG_FILE);
+  gp = gimp_image_get_parasite (image, PARASITE_ORIG_FILE);
   if (gp != NULL)
     {
       p->format = ((ImageParasite *) (gp->data))->format;
       p->ckey = ((ImageParasite *) (gp->data))->ckey;
-      D (("Setting parasite for %u: format: %s (%1u), "
+      D (("Getting parasite for %u: format: %s (%1u), "
           "color key: %s (%1u, %1u, %1u)\n", image, FMT[p->format], p->format,
           (p->ckey.is) ? "yes" : "no", p->ckey.R, p->ckey.G, p->ckey.B));
 
@@ -92,10 +94,10 @@ run (const gchar * name, gint nparams, const GimpParam * param,
   GimpRunMode run_mode;
   GimpPDBStatusType status = GIMP_PDB_SUCCESS;
   GimpExportReturn export = GIMP_EXPORT_CANCEL;
-
   GError *error = NULL;
 
   run_mode = param[0].data.d_int32;
+  gegl_init (NULL, NULL);
 
   *nreturn_vals = 1;
   *return_vals = values;

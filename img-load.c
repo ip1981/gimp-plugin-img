@@ -41,21 +41,22 @@ img_load_image (const gchar * filename, ImageParasite * meta, GError ** error)
   FILE *fp;
   size_t nread;
   size_t src_size;
-  guint8 *src, *dest;
+  guint8 *src, *dest, *buf;
   FileHeader hdr;
   ColorKey ckey;
   guint32 row, col, width, height;
   gint32 frame, nframes, *frames;
-  gchar buf[20];
+  gchar layer_name[20];
   gint32 image, layer;
-  GimpDrawable *drawable;
-  GimpPixelRgn pixel_rgn;
-  GimpImageType image_type;
+  GeglBuffer *gegl_buffer;
+  GimpImageType layer_type;
+  const Babl *format;
 
   ckey.is = 0;
   ckey.R = 0;
   ckey.G = 0;
   ckey.B = 0;
+
   gimp_progress_init_printf ("Opening '%s'",
                              gimp_filename_to_utf8 (filename));
 
@@ -107,11 +108,13 @@ img_load_image (const gchar * filename, ImageParasite * meta, GError ** error)
     {
     case FMT_RGB565:
       src_size *= 2;
-      image_type = GIMP_RGB_IMAGE;
+      layer_type = GIMP_RGB_IMAGE;
+      format = babl_format ("R'G'B' u8");
       break;
     case FMT_RGB:
       src_size *= 3;
-      image_type = GIMP_RGB_IMAGE;
+      layer_type = GIMP_RGB_IMAGE;
+      format = babl_format ("R'G'B' u8");
       /*
        * Read color key
        */
@@ -130,7 +133,8 @@ img_load_image (const gchar * filename, ImageParasite * meta, GError ** error)
       break;
     case FMT_RGBA:
       src_size *= 4;            /* Alpha only for RGBA */
-      image_type = GIMP_RGBA_IMAGE;
+      layer_type = GIMP_RGBA_IMAGE;
+      format = babl_format ("R'G'B'A u8");
       break;
     default:
       D (("Invalid file format: %1u\n", hdr.fmt));
@@ -147,7 +151,10 @@ img_load_image (const gchar * filename, ImageParasite * meta, GError ** error)
   /*
    * We are ready to make image with layers
    */
-  image = gimp_image_new (width, height, GIMP_RGB);
+  image =
+    gimp_image_new_with_precision (width, height, GIMP_RGB,
+                                   GIMP_PRECISION_U8_GAMMA);
+  gimp_image_undo_disable (image);
   gimp_image_set_filename (image, filename);
 
   frame = 0;
@@ -162,14 +169,11 @@ img_load_image (const gchar * filename, ImageParasite * meta, GError ** error)
           gimp_progress_update ((gdouble) frame / (gdouble) nframes);
           D (("Reading frame #%u of %u (%ux%u, %lu bytes)\n", frame, nframes,
               width, height, src_size));
-          g_snprintf (buf, sizeof (buf), "#%i", frame);
+          g_snprintf (layer_name, sizeof (layer_name), "#%i", frame);
           layer =
-            gimp_layer_new (image, buf, width, height, image_type, 100,
+            gimp_layer_new (image, layer_name, width, height, layer_type, 100,
                             GIMP_NORMAL_MODE);
-          gimp_image_add_layer (image, layer, frame - 1);
-          drawable = gimp_drawable_get (layer);
-          gimp_pixel_rgn_init (&pixel_rgn, drawable, 0, 0, width, height,
-                               TRUE, FALSE);
+          gegl_buffer = gimp_drawable_get_buffer (layer);
 
           nread = fread ((char *) src, src_size, 1, fp);
           if (nread != 1)
@@ -185,18 +189,20 @@ img_load_image (const gchar * filename, ImageParasite * meta, GError ** error)
               fclose (fp);
               return -1;
             }
+
           if (hdr.fmt == FMT_RGB565)
             {
               img_map_rgb565_to_rgb (src, dest, src_size);
-              gimp_pixel_rgn_set_rect (&pixel_rgn, (const guchar *) dest, 0,
-                                       0, width, height);
+              buf = dest;
             }
           else
-            {
-              gimp_pixel_rgn_set_rect (&pixel_rgn, (const guchar *) src, 0, 0,
-                                       width, height);
-            }
-          gimp_drawable_detach (drawable);
+            buf = src;
+
+          gegl_buffer_set (gegl_buffer,
+                           GEGL_RECTANGLE (0, 0, width, height), 0,
+                           format, buf, GEGL_AUTO_ROWSTRIDE);
+          g_object_unref (gegl_buffer);
+          gimp_image_insert_layer (image, layer, -1, frame - 1);
         }
     }
 
