@@ -27,7 +27,7 @@ img_get_parasite(gint32 image, ImageParasite * p)
     {
         p->format = ((ImageParasite *) (gp->data))->format;
         p->ckey = ((ImageParasite *) (gp->data))->ckey;
-        D(("Setting parasite for %u: format: %s (%1u), "
+        D(("Getting parasite for %u: format: %s (%1u), "
            "color key: %s (%1u, %1u, %1u)\n", image, FMT[p->format], p->format,
            (p->ckey.is) ? "yes" : "no", p->ckey.R, p->ckey.G, p->ckey.B));
 
