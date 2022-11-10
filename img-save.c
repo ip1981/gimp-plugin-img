@@ -281,41 +281,6 @@ img_save_image (gint32 image, const ImageParasite * plugin,
   gint i, width, height;
   FileHeader hdr;
 
-#if 0
-  ImageParasite test;
-  GError *terr = NULL;
-
-  img_read_options (&test, "RGB", "(23,45,6)", &terr);
-  if (NULL != terr)
-    {
-      printf ("%s\n", terr->message);
-      g_error_free (terr);
-    }
-  img_read_options (&test, "RGBA", "0x999", &terr);
-  if (NULL != terr)
-    {
-      printf ("%s\n", terr->message);
-      g_error_free (terr);
-    }
-  img_read_options (&test, "0", "0x321", &terr);
-  if (NULL != terr)
-    {
-      printf ("%s\n", terr->message);
-      g_error_free (terr);
-    }
-  img_read_options (&test, "2", "0xFFFFFF", &terr);
-  if (NULL != terr)
-    {
-      printf ("%s\n", terr->message);
-      g_error_free (terr);
-    }
-  img_read_options (&test, "RGB", "(0,1;0,7;0,346)", &terr);
-  if (NULL != terr)
-    {
-      printf ("%s\n", terr->message);
-      g_error_free (terr);
-    }
-#endif
   /*
    * Should call sanity_check() for all secure checks
    */
