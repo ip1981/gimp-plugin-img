@@ -4,7 +4,7 @@ GIMPTOOL = gimptool-2.0
 CC = gcc
 LD = gcc
 CFLAGS = $(shell $(GIMPTOOL) --cflags) \
-		 -O2 -ansi -pedantic -Wall -Wextra -Wno-attributes \
+		 -O2 -Wall -Wextra -Wno-attributes \
 		 -Wno-unused-parameter \
 		 #-save-temps -g
 
@@ -44,7 +44,7 @@ clean:
 	rm -f *.o  *.i *.s $(MAIN)
 
 $(MAIN): $(OBJ)
-	$(LD) $(LDFLAGS) $(OBJ) -o $@
+	$(LD) $(OBJ) $(LDFLAGS) -o $@
 
 %.o: %.c $(HDR) Makefile
 	$(CC) -c $(CFLAGS) $< -o $@
