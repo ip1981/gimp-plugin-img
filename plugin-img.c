@@ -102,7 +102,7 @@ run(const gchar * name, gint nparams, const GimpParam * param,
     values[0].data.d_status = GIMP_PDB_EXECUTION_ERROR;
 
     /*
-     * Load image 
+     * Load image
      */
     if (strcmp(name, LOAD_PROC) == 0)
     {
@@ -139,7 +139,7 @@ run(const gchar * name, gint nparams, const GimpParam * param,
     }
 
     /*
-     * Save image 
+     * Save image
      */
     else if (strcmp(name, SAVE_PROC) == 0)
     {
@@ -175,7 +175,7 @@ run(const gchar * name, gint nparams, const GimpParam * param,
               }
 
               /*
-               * Allow user to override default values 
+               * Allow user to override default values
                */
               if ((run_mode == GIMP_RUN_INTERACTIVE) &&
                   (status == GIMP_PDB_SUCCESS))
@@ -218,7 +218,7 @@ run(const gchar * name, gint nparams, const GimpParam * param,
         }
 
         /*
-         * Delete temporary image after export 
+         * Delete temporary image after export
          */
         if (export == GIMP_EXPORT_EXPORT)
         {

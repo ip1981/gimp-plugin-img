@@ -25,7 +25,7 @@ img_map_rgb565_to_rgb(const guint8 * src, guint8 * dest, size_t src_size)
     size_t s, d;
 
     /*
-     * 5+6+5=16bits (2 bytes) per pixel 
+     * 5+6+5=16bits (2 bytes) per pixel
      */
     for (s = 0, d = 0; s < src_size;)
     {
@@ -68,7 +68,7 @@ img_load_image(const gchar * filename, ImageParasite * meta, GError ** error)
     }
 
     /*
-     * Read common header 
+     * Read common header
      */
     nread = fread((void *)&hdr, sizeof(hdr), 1, fp);
     if (nread != 1)
@@ -85,7 +85,7 @@ img_load_image(const gchar * filename, ImageParasite * meta, GError ** error)
     hdr.height = GUINT32_FROM_LE(hdr.height);
 
     /*
-     * Width and height are TOTAL ones 
+     * Width and height are TOTAL ones
      */
     if ((0 == hdr.ncols) || (0 == hdr.nrows) || (hdr.width % hdr.ncols) ||
         (hdr.height % hdr.nrows))
@@ -112,7 +112,7 @@ img_load_image(const gchar * filename, ImageParasite * meta, GError ** error)
           src_size *= 3;
           image_type = GIMP_RGB_IMAGE;
           /*
-           * Read color key 
+           * Read color key
            */
           nread = fread((void *)&ckey, sizeof(ckey), 1, fp);
           if (nread != 1)
@@ -144,7 +144,7 @@ img_load_image(const gchar * filename, ImageParasite * meta, GError ** error)
             D(("Has color key: (%1u, %1u, %1u)\n", ckey.R, ckey.G, ckey.B)));
 
     /*
-     * We are ready to make image with layers 
+     * We are ready to make image with layers
      */
     image = gimp_image_new(width, height, GIMP_RGB);
     gimp_image_set_filename(image, filename);

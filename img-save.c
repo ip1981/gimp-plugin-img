@@ -126,7 +126,7 @@ rgb_to_rgb565(const guint8 * c, guint16 * res)
      * 11111   000000  11111
      * |   high  ||  low   |
      * |       16 bits     |
-     * 
+     *
      */
     (*res) = 0;
     (*res) |= ((guint16) (c[0]) >> 3);  /* Red */
@@ -317,7 +317,7 @@ img_save_image(gint32 image, const ImageParasite * plugin,
     }
 #endif
     /*
-     * Should call sanity_check() for all secure checks 
+     * Should call sanity_check() for all secure checks
      */
 
     layers = gimp_image_get_layers(image, &nlayers);
@@ -326,7 +326,7 @@ img_save_image(gint32 image, const ImageParasite * plugin,
     npixels = width * height;
 
     /*
-     * Making file header 
+     * Making file header
      */
     hdr.fmt = plugin->format;
     hdr.ncols = 1;      /* Always one column */
@@ -353,7 +353,7 @@ img_save_image(gint32 image, const ImageParasite * plugin,
     }
 
     /*
-     * Write file 
+     * Write file
      */
     D(("Writing header: format: %s (%1u), frames: %ux%u, size: %ux%u\n",
        FMT[hdr.fmt], hdr.fmt, hdr.ncols, hdr.nrows, hdr.width, hdr.height));
@@ -369,7 +369,7 @@ img_save_image(gint32 image, const ImageParasite * plugin,
     }
 
     /*
-     * File format specific preparations 
+     * File format specific preparations
      */
     data_size = width * height;
     switch (hdr.fmt)
@@ -407,7 +407,7 @@ img_save_image(gint32 image, const ImageParasite * plugin,
     }
 
     /*
-     * Writing each layer (frame) 
+     * Writing each layer (frame)
      */
     data = g_new(guint8, data_size);
     pixels = g_new(guint8, npixels * 4);        /* Enough for RGB or RGBA */

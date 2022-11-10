@@ -93,7 +93,7 @@ img_save_dialog(gint32 image, ImageParasite * plugin)
     gtk_widget_show(dialog);
 
     /*
-     * Radio buttons to select file format 
+     * Radio buttons to select file format
      */
     fmt_frame = gimp_frame_new("Image format");
     fmt_rgb565 = gtk_radio_button_new_with_label(NULL, FMT[FMT_RGB565]);
@@ -109,13 +109,13 @@ img_save_dialog(gint32 image, ImageParasite * plugin)
     gtk_widget_show(fmt_rgba);
 
     /*
-     * Horizontal main box 
+     * Horizontal main box
      */
     hbox = gtk_hbox_new(TRUE, 2);
     gtk_widget_show(hbox);
 
     /*
-     * Vertical box for radio buttons 
+     * Vertical box for radio buttons
      */
     fmt_align = gtk_alignment_new(0.5, 0, 0, 0);
     gtk_widget_show(fmt_align);
@@ -129,13 +129,13 @@ img_save_dialog(gint32 image, ImageParasite * plugin)
     gtk_box_pack_start(GTK_BOX(fmt_vbox), fmt_rgba, TRUE, TRUE, 0);
 
     /*
-     * Allow color key for RGB and RGBA 
+     * Allow color key for RGB and RGBA
      */
     g_signal_connect(G_OBJECT(fmt_rgb), "clicked", G_CALLBACK(on_RGB), NULL);
     g_signal_connect(G_OBJECT(fmt_rgba), "clicked", G_CALLBACK(on_RGB), NULL);
 
     /*
-     * Vertical box for color key 
+     * Vertical box for color key
      */
     ckey_align = gtk_alignment_new(0.5, 0, 0, 0);
     gtk_widget_show(ckey_align);
@@ -163,14 +163,14 @@ img_save_dialog(gint32 image, ImageParasite * plugin)
     g_signal_connect(G_OBJECT(ckey_image), "button-press-event",
                      G_CALLBACK(on_image_click), NULL);
     /*
-     * Assemble all together 
+     * Assemble all together
      */
     gtk_box_pack_start(GTK_BOX(hbox), fmt_align, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), ckey_align, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
 
     /*
-     * Set initial parameters 
+     * Set initial parameters
      */
     switch (plugin->format)
     {
@@ -193,12 +193,12 @@ img_save_dialog(gint32 image, ImageParasite * plugin)
     on_ckey_use(ckey_use, NULL);
 
     /*
-     * Run the dialog 
+     * Run the dialog
      */
     response = gimp_dialog_run(GIMP_DIALOG(dialog));
 
     /*
-     * Get new parameters 
+     * Get new parameters
      */
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(fmt_rgb565)))
         plugin->format = FMT_RGB565;
