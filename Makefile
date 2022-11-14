@@ -1,54 +1,40 @@
 MAIN = plugin-img
 
 GIMPTOOL = gimptool-2.0
-CC = gcc
-LD = gcc
-CFLAGS = $(shell $(GIMPTOOL) --cflags) \
-		 -O2 -Wall -Wextra -Wno-attributes \
-		 -Wno-unused-parameter
+GIMP = gimp
+CC = cc
+LD = cc
+CFLAGS = -O2 -Wall -Wextra
 
-LIBS = $(shell $(GIMPTOOL) --libs)
-
-SRC = $(wildcard *.c)
-HDR = $(wildcard *.h)
-OBJ = $(subst .c,.o,$(SRC))
-
-build: $(MAIN)
-
-help:
-	@echo "MAKE targets:"
-	@echo ""
-	@echo "build   - build plugin"
-	@echo "install - install plugin"
-	@echo ""
-	@echo "indent  - beatify sources"
-	@echo "clean   - remove build garbage"
-	@echo ""
-	@echo "test    - run gimp with samples"
-	@echo "test-fu - run non-interactively gimp for batch file recoding"
-
-
-install: $(MAIN)
-	$(GIMPTOOL) --install-bin $(MAIN)
-
-indent: $(SRC) $(HDR)
-	indent $(INDENT_OPT) $?
-
-clean:
-	rm -f *.o  *.i *.s $(MAIN)
+SRC = img-load.c img-save.c img-save-dialog.c plugin-img.c
+HDR = $(SRC:.c=.h)
+OBJ = $(SRC:.c=.o)
 
 $(MAIN): $(OBJ)
-	$(LD) $(OBJ) $(LIBS) -o $@
+	$(LD) $(OBJ) `$(GIMPTOOL) --libs` -o $@
 
-%.o: %.c $(HDR) Makefile
-	$(CC) -c $(CFLAGS) $< -o $@
+$(OBJ): $(HDR) Makefile
 
+.c.o:
+	$(CC) `$(GIMPTOOL) --cflags` $(CFLAGS) -c $< -o $@
 
+.PHONY: test
 test: install
 	gimp samples/*.img
 
+.PHONY: test-fu
 test-fu: install img-fu
-	gimp  -i -b - < img-fu
+	$(GIMP) --no-interface --batch - < img-fu
 
-.PHONY: install build test test-fu indent clean
+.PHONY: install
+install: $(MAIN)
+	$(GIMPTOOL) --install-bin $(MAIN)
+
+.PHONY: uninstall
+uninstall:
+	$(GIMPTOOL) --uninstall-bin $(MAIN)
+
+.PHONY: clean
+clean:
+	rm -f *.o *.i *.s $(MAIN)
 
