@@ -63,12 +63,10 @@ on_ckey_use (GtkWidget * widget, gpointer data)
 static gboolean
 on_image_click (GtkWidget * widget, GdkEventButton * event, gpointer data)
 {
-  int width, height, rowstride, n_channels;
+  int rowstride, n_channels;
   guchar *pixels, *p;
 
   n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   pixels = gdk_pixbuf_get_pixels (pixbuf);
   p = pixels + (int) (event->y * rowstride) + (int) (event->x * n_channels);
