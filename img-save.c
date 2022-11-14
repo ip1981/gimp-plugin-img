@@ -423,7 +423,7 @@ img_save_image (gint32 image, const ImageParasite * plugin,
   g_free (data);
   g_free (pixels);
   gimp_progress_update (1.0);
-  D (("*** Written \"%s\"\n", filename));
+  D (("*** Saved \"%s\"\n", filename));
 
   return GIMP_PDB_SUCCESS;
 }

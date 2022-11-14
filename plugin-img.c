@@ -65,7 +65,7 @@ query (void)
   gimp_install_procedure (LOAD_PROC, "Loads files of IMG file format",
                           "Loads files of IMG file format",
                           "Igor Pashev <pashev.igor@gmail.com>",
-                          "Public Domain", "2009", "IMG", NULL, GIMP_PLUGIN,
+                          "Public Domain", "2009-2022", "IMG", NULL, GIMP_PLUGIN,
                           G_N_ELEMENTS (load_args),
                           G_N_ELEMENTS (load_return_vals), load_args,
                           load_return_vals);
@@ -76,7 +76,7 @@ query (void)
   gimp_install_procedure (SAVE_PROC, "Saves files in IMG file format",
                           "Saves files in IMG file format",
                           "Igor Pashev <pashev.igor@gmail.com>",
-                          "Public Domain", "2009", "IMG", "*", GIMP_PLUGIN,
+                          "Public Domain", "2009-2022", "IMG", "*", GIMP_PLUGIN,
                           G_N_ELEMENTS (save_args), 0, save_args, NULL);
 
   gimp_register_file_handler_mime (SAVE_PROC, IMG_MIME);
