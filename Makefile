@@ -2,6 +2,7 @@ MAIN = plugin-img
 
 GIMPTOOL = gimptool-2.0
 GIMP = gimp
+GIMPCONSOLE = gimp-console
 CC = cc
 LD = cc
 CFLAGS = -O2 -Wall -Wextra
@@ -18,13 +19,15 @@ $(OBJ): $(HDR) Makefile
 .c.o:
 	$(CC) `$(GIMPTOOL) --cflags` $(CFLAGS) -c $< -o $@
 
-.PHONY: test
-test: install
-	gimp samples/*.img
+.PHONY: view
+view: install
+	$(GIMP) samples/*.img
 
-.PHONY: test-fu
-test-fu: install img-fu
-	$(GIMP) --no-interface --batch - < img-fu
+.PHONY: test
+test: test.scm install
+	rm -f samples/success
+	$(GIMPCONSOLE) --no-interface --batch - < $<
+	test -f samples/success
 
 .PHONY: install
 install: $(MAIN)
@@ -37,4 +40,6 @@ uninstall:
 .PHONY: clean
 clean:
 	rm -f *.o *.i *.s $(MAIN)
+	rm -f samples/recoded-*
+	rm -f samples/success
 

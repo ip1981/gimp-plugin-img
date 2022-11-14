@@ -1,0 +1,15 @@
+(define (img-recode srcfile destfile fmt ckey)
+  (let* ((image    (car (file-img-load RUN-NONINTERACTIVE srcfile srcfile)))
+         (drawable (car (gimp-image-get-active-layer image))))
+    (file-img-save RUN-NONINTERACTIVE image drawable destfile destfile fmt ckey)))
+
+(catch (gimp-quit 0)
+  (img-recode "samples/rgb.img"    "samples/recoded-rgb-rgb565.img"  "RGB565" "no")
+  (img-recode "samples/rgb.img"    "samples/recoded-rgb-rgba.img"    "RGBA"   "0x0F0")
+  (img-recode "samples/rgb565.img" "samples/recoded-rgb565-rgb.img"  "RGB"    "")
+  (img-recode "samples/rgb565.img" "samples/recoded-rgb565-rgba.img" "RGBA"   "(255, 255, 255)")
+  (img-recode "samples/rgba.img"   "samples/recoded-rgba-rgb.img"    "RGB"    "no")
+  (img-recode "samples/rgba.img"   "samples/recoded-rgba-rgb565.img" "RGB565" "no"))
+
+(with-output-to-file "samples/success" (lambda () (write "SUCCESS")))
+(gimp-quit 0)
